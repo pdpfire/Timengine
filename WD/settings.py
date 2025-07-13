@@ -19,16 +19,29 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-x@)#^wc(!a)**kuo6d_uapt9)f)qbs=n!#c$6fge2xekvxzp12'
+# # SECURITY WARNING: keep the secret key used in production secret!
+# SECRET_KEY = 'django-insecure-x@)#^wc(!a)**kuo6d_uapt9)f)qbs=n!#c$6fge2xekvxzp12'
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# # SECURITY WARNING: don't run with debug turned on in production!
+# DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.1.3', 'localhost', '127.0.0.1']
-# Or to allow any:
-# ALLOWED_HOSTS = ['*']  ← not recommended for production
+# ALLOWED_HOSTS = ['192.168.1.3', 'localhost', '127.0.0.1']
+# # Or to allow any:
+# # ALLOWED_HOSTS = ['*']  ← not recommended for production
 
+import os
+
+# Load SECRET_KEY from environment (secure)
+SECRET_KEY = os.environ.get('SECRET_KEY', 'insecure-default-key-for-dev')
+
+# Load ALLOWED_HOSTS from environment variable
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost').split(',')
+
+# Optional: Enable secure proxy SSL header (Render uses reverse proxy)
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+# Optional: Force HTTPS
+SECURE_SSL_REDIRECT = True
 
 
 # Application definition
