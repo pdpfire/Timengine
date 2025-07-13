@@ -1,0 +1,105 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Task Diary - Instructions</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <style>
+        body {
+            font-family: 'Segoe UI', 'Roboto', sans-serif;
+            max-width: 720px;
+            margin: auto;
+            padding: 2rem;
+            background-color: #f0f2f5;
+            color: #333;
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            text-align: center;
+        }
+
+        p.tagline {
+            text-align: center;
+            font-style: italic;
+            color: #666;
+            margin-top: 0;
+        }
+
+        .instructions {
+            border: 1px solid #ddd;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            background-color: #fff;
+            margin-bottom: 2rem;
+        }
+
+        .instructions h3 {
+            font-size: 1.25rem;
+            color: #555;
+            margin-bottom: 1rem;
+        }
+
+        .instructions ul {
+            list-style: none;
+            padding-left: 1rem;
+        }
+
+        .instructions li {
+            margin-bottom: 0.75rem;
+            line-height: 1.5;
+        }
+
+        .options {
+            margin-top: 2rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        .btn {
+            display: inline-block;
+            min-width: 220px;
+            text-align: center;
+            padding: 1rem 2rem;
+            font-size: 1rem;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .btn:hover {
+            background-color: #0056b3;
+            transform: scale(1.02);
+        }
+    </style>
+</head>
+<body>
+
+    <h1>📝 Welcome to Time Engine Tracker</h1>
+    <p class="tagline">“The things which drives you.”</p>
+
+    <div class="instructions">
+        <h3>Before You Start:</h3>
+        <ul style="list-style: disc; padding-left: 1.5rem;">
+            <li>⏱️ <strong>Start Tracking an Activity:</strong> When you begin an activity you want to track, simply tap on <em>Track a New Activity</em> to start the timer.</li>
+            <li>📝 <strong>Record Activity Details:</strong> Once your activity is complete, the app will prompt you to enter details about what you just did. This helps you remember and categorize your time.</li>
+            <li>📌 <strong>Organize with Goals:</strong> You can add or select a <em>Goal</em> for your activities. This helps you organize your efforts and understand how your time contributes to your objectives.</li>
+            <li>📖 <strong>Review Your Progress:</strong> At any time, you can review past activities to see how you've been spending your time and identify areas for improvement.</li>
+        </ul>
+    </div>
+
+    <div class="options">
+        <a href="/start-task/" class="btn">➕ Start Activity</a>
+        <a href="{% url 'read_diary' %}" class="btn">📖 Review Past Activities</a>
+    </div>
+
+</body>
+</html>

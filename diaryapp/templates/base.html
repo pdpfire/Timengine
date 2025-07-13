@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Motivational Engine Tracker{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Tailwind CDN (use local for production) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Optional Tailwind theme config -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#4F46E5',    // Indigo
+                        accent: '#90CAF9',     // Soft Blue
+                        cta: '#F59E0B',        // Amber
+                        surface: '#E5E7EB',
+                        background: '#F0F2F5',
+                        darkText: '#111827',
+                        mutedText: '#6B7280',
+                    },
+                    fontFamily: {
+                        sans: ['Segoe UI', 'Roboto', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-background text-darkText font-sans max-w-3xl mx-auto px-6 py-8">
+
+    <!-- Header (can be used on all pages) -->
+    <header class="mb-8">
+        <h1 class="text-3xl font-bold text-center">📝 Welcome to Motivational Engine Tracker</h1>
+        <p class="tagline text-center italic text-mutedText mt-1">“The things which drives you.”</p>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        {% block content %}
+        <!-- Child template content goes here -->
+        {% endblock %}
+    </main>
+
+    <!-- Footer (optional) -->
+    <footer class="mt-12 text-center text-sm text-mutedText">
+        &copy; 2025 Time Engine
+    </footer>
+
+</body>
+</html>

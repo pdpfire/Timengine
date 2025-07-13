@@ -1,0 +1,124 @@
+{% load widget_tweaks %}
+{% load time_filters %}
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Read Diary</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+<div class="container py-5">
+    <div class="card shadow-lg">
+        <div class="card-body">
+
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="card-title mb-0">📖 Diary Entries</h2>
+                <div>
+                    <!-- <a href="{% url 'task_in_progress' %}" class="btn btn-sm btn-primary me-2">➕ Add Entry</a> -->
+                    <a href="{% url 'start_task' %}" class="btn btn-success btn-lg me2">➕ Start Next ACTIVITY</a>
+
+                    <a href="{% url 'home' %}" class="btn btn-secondary btn-lg">🏠 Home</a>
+                </div>
+            </div>
+            
+
+<form method="get" class="row row-cols-md-auto g-3 align-items-center mb-4">
+    <div class="col">
+        <label class="form-label mb-0 small">Goal</label>
+        <select name="goal" class="form-select">
+            <option value="">-- All Goals --</option>
+            {% for goal in all_goals %}
+                <option value="{{ goal }}" {% if goal == goal_filter %}selected{% endif %}>{{ goal }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="col">
+        <label class="form-label mb-0 small">Start Date</label>
+        <input type="date" name="start_date" value="{{ start_date }}" class="form-control" />
+    </div>
+    <div class="col">
+        <label class="form-label mb-0 small">End Date</label>
+        <input type="date" name="end_date" value="{{ end_date }}" class="form-control" />
+    </div>
+    <div class="col align-self-end">
+        <button type="submit" class="btn btn-outline-primary">🔍 Filter</button>
+        <a href="{% url 'read_diary' %}" class="btn btn-outline-secondary">Reset</a>
+    </div>
+</form>
+
+
+            {% if entries %}
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped table-hover align-middle">
+                        <thead class="table-dark">
+                        <tr>
+                            <th>ID</th>
+                            <th>Start Time</th>
+                            <th>Title</th>
+                            <th>Task Time</th>
+                            <th>Details</th>
+                            <th>Detail Time</th>
+                            <th>End Time</th>
+                            <th>Goal</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for entry in entries %}
+                            <tr>
+                                <td>{{ entry.id }}</td>
+                                <!-- <td>{{ entry.strtime }}</td> -->
+                                <td>
+                                <span class="utc-time" data-utc="{{ entry.strtime|date:'c' }}"></span>
+                                </td>
+
+                                <!-- <td><span class="utc-time" data-utc="{{ entry.strtime|date:'c' }}"></span></td> -->
+                                <td>{{ entry.title }}</td>
+                                <td>{{ entry.tasktime|format_duration }}</td>
+                                <td>{{ entry.taskdetails }}</td>
+                                <td>{{ entry.detailtime|format_duration }}</td>
+                                <!-- <td>{{ entry.endtime }}</td> -->
+                                <td>
+                                <span class="utc-time" data-utc="{{ entry.endtime|date:'c' }}"></span>
+                                </td>
+                                <td>{{ entry.goal }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <p class="text-muted">No diary entries found.</p>
+            {% endif %}
+
+            
+        </div>
+    </div>
+</div>
+</body>
+</html>
+
+<script>
+
+  document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll('.utc-time').forEach(span => {
+      const utcStr = span.dataset.utc;
+      if (utcStr) {
+        const localDate = new Date(utcStr);
+        span.textContent = localDate.toLocaleString(undefined, {
+          year: 'numeric',
+          month: 'short',
+          day: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit',
+          second: '2-digit',
+          hour12: false
+        });
+      } else {
+        span.textContent = "⚠️ No time";
+      }
+    });
+  });
+
+</script>
