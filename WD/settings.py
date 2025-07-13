@@ -19,14 +19,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
-# # SECURITY WARNING: keep the secret key used in production secret!
+# SECURITY WARNING: keep the secret key used in production secret!
 # SECRET_KEY = 'django-insecure-x@)#^wc(!a)**kuo6d_uapt9)f)qbs=n!#c$6fge2xekvxzp12'
 
 # # SECURITY WARNING: don't run with debug turned on in production!
 # DEBUG = True
 
 # ALLOWED_HOSTS = ['192.168.1.3', 'localhost', '127.0.0.1']
-# # Or to allow any:
+# Or to allow any:
 # # ALLOWED_HOSTS = ['*']  ← not recommended for production
 
 import os
@@ -43,6 +43,17 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 # Optional: Force HTTPS
 SECURE_SSL_REDIRECT = True
 
+from django.http import HttpResponsePermanentRedirect
+
+class WwwRedirectMiddleware:
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        host = request.get_host()
+        if host.startswith('www.'):
+            return HttpResponsePermanentRedirect('https://' + host[4:] + request.get_full_path())
+        return self.get_response(request)
 
 # Application definition
 
