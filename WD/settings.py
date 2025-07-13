@@ -19,14 +19,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
+# # SECURITY WARNING: keep the secret key used in production secret!
 # SECRET_KEY = 'django-insecure-x@)#^wc(!a)**kuo6d_uapt9)f)qbs=n!#c$6fge2xekvxzp12'
 
 # # SECURITY WARNING: don't run with debug turned on in production!
 # DEBUG = True
 
 # ALLOWED_HOSTS = ['192.168.1.3', 'localhost', '127.0.0.1']
-# Or to allow any:
+# # Or to allow any:
 # # ALLOWED_HOSTS = ['*']  ← not recommended for production
 
 import os
@@ -102,32 +102,39 @@ WSGI_APPLICATION = 'WD.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
+# DATABASES = {
+#     # 'default': {
+#     #     'ENGINE': 'django.db.backends.sqlite3',
+#     #     'NAME': BASE_DIR / 'db.sqlite3',  # For admin, auth, etc.
+#     # },
+#     # 'diary': {
+#     #     'ENGINE': 'django.db.backends.sqlite3',
+#     #     'NAME': BASE_DIR / 'Diary_updated.db',  # Separate DB for your diary
+#     # }
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'WebDiary',
+#         'USER': 'postgres',
+#         'PASSWORD': 'postgres',
+#         'HOST': 'localhost',
+#         'PORT': '5432',
+#     },
+#     'diary': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'DiaryDB',
+#         'USER': 'postgres',
+#         'PASSWORD': 'postgres',
+#         'HOST': 'localhost',
+#         'PORT': '5432',
+#     }
+# }
+import dj_database_url
+
 DATABASES = {
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.sqlite3',
-    #     'NAME': BASE_DIR / 'db.sqlite3',  # For admin, auth, etc.
-    # },
-    # 'diary': {
-    #     'ENGINE': 'django.db.backends.sqlite3',
-    #     'NAME': BASE_DIR / 'Diary_updated.db',  # Separate DB for your diary
-    # }
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'WebDiary',
-        'USER': 'postgres',
-        'PASSWORD': 'postgres',
-        'HOST': 'localhost',
-        'PORT': '5432',
-    },
-    'diary': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'DiaryDB',
-        'USER': 'postgres',
-        'PASSWORD': 'postgres',
-        'HOST': 'localhost',
-        'PORT': '5432',
-    }
+    'default': dj_database_url.config(default=os.environ.get('DATABASE_URL'))
 }
+
+
 DATABASE_ROUTERS = ['diaryapp.db_router.DiaryRouter']
 # DATABASE_ROUTERS = ['dbrouters.DiaryRouter']
 
