@@ -32,6 +32,18 @@
       </div>
 
       <div class="mb-3">
+        {{ form.feeling.label_tag }} {# Renders the label "How did you feel during the Task?" #}
+        {{ form.feeling|add_class:"form-select" }} {# Use form-select for Bootstrap 5 dropdowns #}
+        {% if form.feeling.errors %}
+            <div class="text-danger">
+                {% for error in form.feeling.errors %}
+                    {{ error }}
+                {% endfor %}
+            </div>
+        {% endif %}
+      </div>
+
+      <div class="mb-3">
         {{ form.goal.label_tag }}
         {{ form.goal|add_class:"form-select" }}
       </div>
@@ -122,6 +134,19 @@ document.querySelectorAll('.utc-time').forEach(span => {
         {{ form.taskdetails.label_tag }}
         {{ form.taskdetails|add_class:"form-control" }}
       </div>
+
+      <div class="mb-3">
+        {{ form.feeling.label_tag }} {# Renders the label "How did you feel during the Task?" #}
+        {{ form.feeling|add_class:"form-select" }} {# Use form-select for Bootstrap 5 dropdowns #}
+        {% if form.feeling.errors %}
+            <div class="text-danger">
+                {% for error in form.feeling.errors %}
+                    {{ error }}
+                {% endfor %}
+            </div>
+        {% endif %}
+      </div>
+
 
       <div class="mb-3">
         {{ form.goal.label_tag }}

@@ -3,14 +3,23 @@
 __pycache__/
 
 # Django
+*.log
 db.sqlite3
-/media
-/staticfiles
+media/
+staticfiles/
+static/          # if you collectstatic into this folder
 
-# Env
+# Environment
 .env
+*.env
 venv/
+timengine/
 
-# IDE/Editor
+# VS Code / JetBrains / etc.
 .vscode/
 .idea/
+
+# OS Files
+.DS_Store
+Thumbs.db
+

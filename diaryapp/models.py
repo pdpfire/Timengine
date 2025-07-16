@@ -23,6 +23,22 @@ class DiaryEntry(models.Model):
     endtime = models.DateTimeField()
     goal = models.TextField()
 
+    FEELING_CHOICES = [
+        ('fulfilled', 'Fulfilled'),
+        ('energized', 'Energized'),
+        ('focused', 'Focused'),
+        ('neutral', 'Neutral'),
+        ('tired', 'Tired'),
+        ('stressed', 'Stressed'),
+        ('frustrated', 'Frustrated'),
+        # Add more feelings as desired
+    ]
+    feeling = models.CharField(
+        max_length=50,
+        choices=FEELING_CHOICES,
+        default='neutral', # Or can be blank=True, null=True if optional
+        help_text="How did you feel during/after this activity?"
+    )
     class Meta:
         db_table = 'final_diary'
         app_label = 'diaryapp'

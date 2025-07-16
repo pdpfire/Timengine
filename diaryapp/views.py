@@ -64,8 +64,10 @@ def task_in_progress(request):
 def done_with_task(request):
     print("✅ Entered done_with_task view at:", timezone.now())
     print("🧠 DWT SESSION Start:\n", dict(request.session))
+
     strtime_str = request.session.get('strtime')
     if not strtime_str:
+        print("🛑 No 'strtime' in session, redirecting to start_task.")
         return redirect('start_task')
 
     strtime = datetime.fromisoformat(strtime_str)
@@ -95,8 +97,14 @@ def done_with_task(request):
         form = TaskDetailForm(request.POST, goals=goals)
         if form.is_valid():
             request.session['form_data'] = form.cleaned_data
+            print("✅ Form data validated and stored in session for 'finish_task'.")
             return redirect('finish_task')
+        else:
+            print("❌ Form is not valid. Re-rendering with errors.")
+            print("Form errors:", form.errors) # Log errors for debugging
+            pass # Continue to render the template below
     else:
+        initial_data = request.session.get('form_data', {})
         form = TaskDetailForm(goals=goals)
     
     print("🧠 DWT SESSION End:\n", dict(request.session))
@@ -130,6 +138,7 @@ def finish_task(request):
             taskdetails=form_data.get('taskdetails'),
             detailtime=str(detail_time),
             endtime=end_time,
+            feeling = form_data.get('feeling'),
             goal=goal
         )
         

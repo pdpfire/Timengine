@@ -20,40 +20,41 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # # SECURITY WARNING: keep the secret key used in production secret!
-# SECRET_KEY = 'django-insecure-x@)#^wc(!a)**kuo6d_uapt9)f)qbs=n!#c$6fge2xekvxzp12'
+SECRET_KEY = 'django-insecure-x@)#^wc(!a)**kuo6d_uapt9)f)qbs=n!#c$6fge2xekvxzp12'
 
 # # SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG = True
+DEBUG = True
 
-# ALLOWED_HOSTS = ['192.168.1.3', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['192.168.1.9', 'localhost', '127.0.0.1', 'motivationalengine.com','www.motivationalengine.com']
 # # Or to allow any:
-# # ALLOWED_HOSTS = ['*']  ← not recommended for production
+# #ALLOWED_HOSTS = ['*']  ← not recommended for production
 
 import os
 
 # Load SECRET_KEY from environment (secure)
-SECRET_KEY = os.environ.get('SECRET_KEY', 'insecure-default-key-for-dev')
+# SECRET_KEY = os.environ.get('SECRET_KEY', 'insecure-default-key-for-dev')
 
 # Load ALLOWED_HOSTS from environment variable
-ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost').split(',')
+#ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost').split(',')
+
 
 # Optional: Enable secure proxy SSL header (Render uses reverse proxy)
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+# SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 # Optional: Force HTTPS
-SECURE_SSL_REDIRECT = True
+SECURE_SSL_REDIRECT = False
 
-from django.http import HttpResponsePermanentRedirect
+# from django.http import HttpResponsePermanentRedirect
 
-class WwwRedirectMiddleware:
-    def __init__(self, get_response):
-        self.get_response = get_response
-
-    def __call__(self, request):
-        host = request.get_host()
-        if host.startswith('www.'):
-            return HttpResponsePermanentRedirect('https://' + host[4:] + request.get_full_path())
-        return self.get_response(request)
+# class WwwRedirectMiddleware:
+#     def __init__(self, get_response):
+#         self.get_response = get_response
+# 
+#     def __call__(self, request):
+#         host = request.get_host()
+#         if host.startswith('www.'):
+#             return HttpResponsePermanentRedirect('https://' + host[4:] + request.get_full_path())
+#         return self.get_response(request)
 
 # Application definition
 
@@ -130,9 +131,26 @@ WSGI_APPLICATION = 'WD.wsgi.application'
 # }
 import dj_database_url
 
+
 DATABASES = {
-    'default': dj_database_url.config(default=os.environ.get('DATABASE_URL'))
+    'default': { # This will be for auth, admin, sessions, etc.
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'django_main_db', # Use the new database you just created
+        'USER': 'postgres',
+        'PASSWORD': 'postgres',
+        'HOST': 'localhost',
+        'PORT': '5432',
+    },
+    'diary': { # This will be for your diaryapp's models, as intended
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'diarydb_db', # This is your existing diary application database
+        'USER': 'postgres',
+        'PASSWORD': 'postgres',
+        'HOST': 'localhost',
+        'PORT': '5432',
+    }
 }
+
 
 
 DATABASE_ROUTERS = ['diaryapp.db_router.DiaryRouter']

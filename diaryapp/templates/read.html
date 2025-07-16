@@ -1,106 +1,154 @@
 {% load widget_tweaks %}
 {% load time_filters %}
 
-
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Read Diary</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <meta charset="UTF-8">
+  <title>Diary Entries</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    /* Optional: Style for input calendar icon */
+    .input-group-append .btn {
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+    }
+  </style>
 </head>
 <body class="bg-light">
-<div class="container py-5">
-    <div class="card shadow-lg">
-        <div class="card-body">
 
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <h2 class="card-title mb-0">📖 Diary Entries</h2>
-                <div>
-                    <!-- <a href="{% url 'task_in_progress' %}" class="btn btn-sm btn-primary me-2">➕ Add Entry</a> -->
-                    <a href="{% url 'start_task' %}" class="btn btn-success btn-lg me2">➕ Start Next ACTIVITY</a>
+<div class="container my-5">
+  <div class="card shadow p-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h2 class="mb-0">📖 Diary Entries</h2>
+      <div>
+        <a href="{% url 'done_with_task' %}" class="btn btn-success me-2">➕ Start Next ACTIVITY</a>
+        <a href="{% url 'home' %}" class="btn btn-secondary">🏠 Home</a>
+      </div>
+    </div>
 
-                    <a href="{% url 'home' %}" class="btn btn-secondary btn-lg">🏠 Home</a>
-                </div>
-            </div>
-            
-
-<form method="get" class="row row-cols-md-auto g-3 align-items-center mb-4">
-    <div class="col">
-        <label class="form-label mb-0 small">Goal</label>
-        <select name="goal" class="form-select">
-            <option value="">-- All Goals --</option>
-            {% for goal in all_goals %}
-                <option value="{{ goal }}" {% if goal == goal_filter %}selected{% endif %}>{{ goal }}</option>
-            {% endfor %}
+    {# --- Filter Section (Reconstructed from image_06fec2.png) --- #}
+    <form method="get" class="row row-cols-md-auto g-3 align-items-center mb-4">
+      <div class="col">
+        <label class="form-label small mb-0" for="id_goal_filter">Goal</label>
+        <select name="goal_filter" class="form-select" id="id_goal_filter">
+          <option value="" {% if not goal_filter %}selected{% endif %}>-- All Goals --</option>
+          {% for goal in all_goals %}
+            <option value="{{ goal }}" {% if goal == goal_filter %}selected{% endif %}>{{ goal }}</option>
+          {% endfor %}
         </select>
-    </div>
-    <div class="col">
-        <label class="form-label mb-0 small">Start Date</label>
-        <input type="date" name="start_date" value="{{ start_date }}" class="form-control" />
-    </div>
-    <div class="col">
-        <label class="form-label mb-0 small">End Date</label>
-        <input type="date" name="end_date" value="{{ end_date }}" class="form-control" />
-    </div>
-    <div class="col align-self-end">
-        <button type="submit" class="btn btn-outline-primary">🔍 Filter</button>
+      </div>
+
+      <div class="col">
+        <label class="form-label small mb-0" for="id_start_date">Start Date</label>
+        <input type="date" name="start_date" id="id_start_date" class="form-control" value="{{ start_date|date:'Y-m-d' }}">
+      </div>
+
+      <div class="col">
+        <label class="form-label small mb-0" for="id_end_date">End Date</label>
+        <input type="date" name="end_date" id="id_end_date" class="form-control" value="{{ end_date|date:'Y-m-d' }}">
+      </div>
+
+      <div class="col-auto align-self-end">
+        <button type="submit" class="btn btn-primary">Filter</button>
         <a href="{% url 'read_diary' %}" class="btn btn-outline-secondary">Reset</a>
-    </div>
-</form>
+      </div>
+    </form>
+    {# --- End Filter Section --- #}
 
+    {% if entries %}
+      <div class="table-responsive">
+        <table class="table table-striped table-hover">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Start Time</th>
+              <th>Title</th>
+              <th>Task Time</th>
+              <th>Details</th>
+              <th>Feeling</th> {# <-- ADDED FEELING HEADER #}
+              <th>Detail Time</th>
+              <th>End Time</th>
+              <th>Goal</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for entry in entries %}
+            <tr>
+              <td>{{ entry.id }}</td>
+              <td>{{ entry.strtime|date:"d M Y, H:i:s" }}</td>
+              <td>{{ entry.title }}</td>
+	      <td>{{ entry.tasktime|format_duration }}</td>
+              <td>
+                {# Display truncated details in the table cell with "Read More" button #}
+                {{ entry.taskdetails|truncatechars:70 }} {# Adjust 70 to your desired length #}
+                {% if entry.taskdetails|length > 70 %} {# Only show button if text is actually truncated #}
+                  <button type="button" class="btn btn-link btn-sm p-0 ms-1"
+                          data-bs-toggle="modal" data-bs-target="#detailsModal"
+                          data-title="{{ entry.title }}"
+                          data-details="{{ entry.taskdetails|linebreaksbr|escape }}">
+                    Read More
+                  </button>
+                {% endif %}
+              </td>
+              <td>{{ entry.get_feeling_display }}</td> {# <-- ADDED FEELING DATA #}
+	      <td>{{ entry.detailtime|format_duration }}</td>
+              <td>{{ entry.endtime|date:"d M Y, H:i:s" }}</td>
+              <td>{{ entry.goal }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% else %}
+      <p class="text-muted">No diary entries found.</p>
+    {% endif %}
 
-            {% if entries %}
-                <div class="table-responsive">
-                    <table class="table table-bordered table-striped table-hover align-middle">
-                        <thead class="table-dark">
-                        <tr>
-                            <th>ID</th>
-                            <th>Start Time</th>
-                            <th>Title</th>
-                            <th>Task Time</th>
-                            <th>Details</th>
-                            <th>Detail Time</th>
-                            <th>End Time</th>
-                            <th>Goal</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {% for entry in entries %}
-                            <tr>
-                                <td>{{ entry.id }}</td>
-                                <!-- <td>{{ entry.strtime }}</td> -->
-                                <td>
-                                <span class="utc-time" data-utc="{{ entry.strtime|date:'c' }}"></span>
-                                </td>
-
-                                <!-- <td><span class="utc-time" data-utc="{{ entry.strtime|date:'c' }}"></span></td> -->
-                                <td>{{ entry.title }}</td>
-                                <td>{{ entry.tasktime|format_duration }}</td>
-                                <td>{{ entry.taskdetails }}</td>
-                                <td>{{ entry.detailtime|format_duration }}</td>
-                                <!-- <td>{{ entry.endtime }}</td> -->
-                                <td>
-                                <span class="utc-time" data-utc="{{ entry.endtime|date:'c' }}"></span>
-                                </td>
-                                <td>{{ entry.goal }}</td>
-                            </tr>
-                        {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-            {% else %}
-                <p class="text-muted">No diary entries found.</p>
-            {% endif %}
-
-            
-        </div>
-    </div>
+  </div>
 </div>
-</body>
-</html>
+
+<div class="modal fade" id="detailsModal" tabindex="-1" aria-labelledby="detailsModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="detailsModalLabel">Activity Details: <span id="modalEntryTitle"></span></h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" id="modalEntryDetails">
+        {# Full details will be inserted here by JavaScript #}
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
+  // JavaScript for "Read More" Modal
+  document.addEventListener('DOMContentLoaded', function() {
+    var detailsModal = document.getElementById('detailsModal');
+    detailsModal.addEventListener('show.bs.modal', function (event) {
+      // Button that triggered the modal
+      var button = event.relatedTarget; 
 
+      // Extract info from data-bs-* attributes
+      var title = button.getAttribute('data-title');
+      var details = button.getAttribute('data-details'); 
+
+      // Update the modal's content.
+      var modalTitleSpan = detailsModal.querySelector('#modalEntryTitle');
+      var modalBody = detailsModal.querySelector('#modalEntryDetails');
+
+      modalTitleSpan.textContent = title;
+      modalBody.innerHTML = details; // Use innerHTML to render <br> tags
+    });
+  });
+
+  // Your existing Timezone rendering script
   document.addEventListener("DOMContentLoaded", function () {
     document.querySelectorAll('.utc-time').forEach(span => {
       const utcStr = span.dataset.utc;
@@ -116,9 +164,11 @@
           hour12: false
         });
       } else {
-        span.textContent = "⚠️ No time";
+        span.textContent = " No time";
       }
     });
   });
-
 </script>
+
+</body>
+</html>
