@@ -25,7 +25,13 @@ SECRET_KEY = 'django-insecure-x@)#^wc(!a)**kuo6d_uapt9)f)qbs=n!#c$6fge2xekvxzp12
 # # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.1.9', 'localhost', '127.0.0.1', 'motivationalengine.com','www.motivationalengine.com']
+import socket
+
+hostname = socket.gethostname()
+local_ip = socket.gethostbyname(hostname)
+
+ALLOWED_HOSTS = [local_ip, 'localhost', 'motivationalengine.com','www.motivationalengine.com', 'timengine.local']
+
 # # Or to allow any:
 # #ALLOWED_HOSTS = ['*']  ← not recommended for production
 

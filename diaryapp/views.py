@@ -154,7 +154,7 @@ def finish_task(request):
 
 
 def read_diary(request):
-    goal_filter = request.GET.get('goal', '').strip()
+    goal_filter = request.GET.get('goal_filter', '').strip()
     start_date = request.GET.get('start_date', '').strip()
     end_date = request.GET.get('end_date', '').strip()
 
