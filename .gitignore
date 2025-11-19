@@ -14,6 +14,7 @@ static/          # if you collectstatic into this folder
 *.env
 venv/
 timengine/
+app_env/
 
 # VS Code / JetBrains / etc.
 .vscode/
