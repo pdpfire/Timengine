@@ -30,7 +30,7 @@ import socket
 hostname = socket.gethostname()
 local_ip = socket.gethostbyname(hostname)
 
-ALLOWED_HOSTS = [local_ip, 'localhost', 'motivationalengine.com','www.motivationalengine.com', 'timengine.local']
+ALLOWED_HOSTS = [local_ip,'192.168.1.11', 'localhost', 'motivationalengine.com','www.motivationalengine.com', 'motivationalengine.local']
 
 # # Or to allow any:
 # #ALLOWED_HOSTS = ['*']  ← not recommended for production
