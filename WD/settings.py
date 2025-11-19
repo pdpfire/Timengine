@@ -30,7 +30,7 @@ import socket
 hostname = socket.gethostname()
 local_ip = socket.gethostbyname(hostname)
 
-ALLOWED_HOSTS = [local_ip,'192.168.1.11', 'localhost', 'motivationalengine.com','www.motivationalengine.com', 'motivationalengine.local','https://motivationalengine.netlify.app/','https://timengine.onrender.com/']
+ALLOWED_HOSTS = [local_ip,'192.168.1.11', 'localhost', 'motivationalengine.com','www.motivationalengine.com', 'motivationalengine.local','https://motivationalengine.netlify.app/','https://timengine.onrender.com/','timengine.onrender.com']
 
 # # Or to allow any:
 # #ALLOWED_HOSTS = ['*']  ← not recommended for production
