@@ -139,23 +139,28 @@ import dj_database_url
 
 
 DATABASES = {
-    'default': { # This will be for auth, admin, sessions, etc.
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'django_main_db', # Use the new database you just created
-        'USER': 'postgres',
-        'PASSWORD': 'postgres',
-        'HOST': 'localhost',
-        'PORT': '5432',
-    },
-    'diary': { # This will be for your diaryapp's models, as intended
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'diarydb_db', # This is your existing diary application database
-        'USER': 'postgres',
-        'PASSWORD': 'postgres',
-        'HOST': 'localhost',
-        'PORT': '5432',
-    }
+    'default': dj_database_url.config(default=os.environ.get("DATABASE_URL"))
 }
+
+
+#DATABASES = {
+#    'default': { # This will be for auth, admin, sessions, etc.
+#        'ENGINE': 'django.db.backends.postgresql',
+#        'NAME': 'django_main_db', # Use the new database you just created
+#        'USER': 'postgres',
+#        'PASSWORD': 'postgres',
+#        'HOST': 'localhost',
+#        'PORT': '5432',
+#    },
+#    'diary': { # This will be for your diaryapp's models, as intended
+#        'ENGINE': 'django.db.backends.postgresql',
+#        'NAME': 'diarydb_db', # This is your existing diary application database
+#        'USER': 'postgres',
+#        'PASSWORD': 'postgres',
+#        'HOST': 'localhost',
+#        'PORT': '5432',
+#    }
+#}
 
 
 
